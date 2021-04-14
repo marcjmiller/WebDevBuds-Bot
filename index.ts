@@ -1,5 +1,7 @@
 import { Client } from "@typeit/discord";
 
+
+const path = require("path");
 export class Main {
   private static _client: Client;
 
@@ -8,15 +10,21 @@ export class Main {
   }
 
   static start() {
-    this._client = new Client();
+    this._client = new Client({
+      fetchAllMembers: true,
+      variablesChar: ":",
+      classes: ["*.ts", "*.js"],
+    });
 
     this._client.login(
       process.env.TOKEN || "",
-      `${__dirname}/*Discord.ts`,
-      `${__dirname}/*Discord.js`
+      `${__dirname}/discords/*.ts`,
+      `${__dirname}/discords/*.js`
     );
 
-    console.log(Client.getCommands());
+    this._client.on("ready", () => {
+      console.log(Client.getCommands());
+    });
   }
 }
 
